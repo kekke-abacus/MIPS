@@ -1,6 +1,10 @@
 `timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Design 	: MIPS Processor
+// Module	: Forwarding unit
+//////////////////////////////////////////////////////////////////////////////////
 
-module ForwardingUnit (
+module ForwardingUnit( 
     input  logic        UseImmed,
     input  logic        UseShamt,
     input  logic [4:0]  ID_Rs, ID_Rt,
@@ -12,15 +16,15 @@ module ForwardingUnit (
     output logic        DataMemForwardCtrl_MEM
 );
 
-    // Forwarding control signals
+	// Forwarding control signals
     typedef enum logic [1:0] {
         FORWARD_NONE  = 2'b00,
         FORWARD_EX    = 2'b01,
         FORWARD_MEM   = 2'b10,
         FORWARD_CONST = 2'b11  // For shamt or immediate usage
     } forward_t;
-
-    // ALU Input A forwarding logic
+	
+	// ALU Input A forwarding logic
     always_comb begin
         if (!UseShamt && EX_Rw != 5'd0) begin
             if (ID_Rs == EX_Rw && EX_RegWrite)
@@ -63,5 +67,5 @@ module ForwardingUnit (
             DataMemForwardCtrl_MEM = 1'b0;
         end
     end
-
+	
 endmodule

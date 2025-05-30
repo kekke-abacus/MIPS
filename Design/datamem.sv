@@ -1,19 +1,29 @@
-module DataMemory (
-    input  logic         Clock,
-    input  logic         MemoryRead,
-    input  logic         MemoryWrite,
-    input  logic [5:0]   Address,
-    input  logic [31:0]  WriteData,
-    output logic [31:0]  ReadData
-);
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Design	:MIPS Processor
+// Module 	: Data Memory
+//////////////////////////////////////////////////////////////////////////////////
 
-    logic [31:0] datamem [0:63];
-
-    always_ff @(posedge Clock) begin
-        if (MemoryWrite)
-            datamem[Address] <= WriteData;
-        if (MemoryRead)
-            ReadData <= datamem[Address];
-    end
-
+module DataMemory (input logic Clock, 
+				input logic MemoryRead,  
+				input logic MemoryWrite, 
+				input logic [5:0]Address,
+				output logic [31:0]ReadData,
+				input logic [31:0]WriteData ); 
+				
+		logic [31:0]datamem[63:0];
+		
+		
+	always @(posedge Clock)   //memory read operation
+        begin
+             if (MemoryRead == 1)  
+                     ReadData <= datamem[Address];
+        end
+      
+     always @(negedge Clock)  //memory write operation
+         begin
+              if(MemoryWrite == 1) 
+                      datamem[Address] <= WriteData;
+         end
+        				
 endmodule

@@ -1,6 +1,10 @@
 `timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Design	: MIPS Processor
+// module	: ALU control
+//////////////////////////////////////////////////////////////////////////////////
 
-// ALU operation codes
+//OPCODES
 `define AND 4'b0000
 `define OR 4'b0001
 `define ADD 4'b0010
@@ -16,7 +20,7 @@
 `define SRA 4'b1101
 `define LUI 4'b1110
 
-// R-type function codes
+//R-type function codes
 `define SLLFunc 6'b000000
 `define SRLFunc 6'b000010
 `define SRAFunc 6'b000011
@@ -31,34 +35,29 @@
 `define SLTFunc 6'b101010
 `define SLTUFunc 6'b101011
 
-// ALU Control Module
-module ALUControl(
-    output reg [3:0] ALUCtrl, // ALU operation control signal
-    input [3:0] ALUop,        // ALU operation type (from control unit)
-    input [5:0] FuncCode      // Function code from instruction (for R-type)
-);
 
-    always @(*) begin
-        if (ALUop == 4'b1111) begin
-            case(FuncCode)
-                `SLLFunc  : ALUCtrl <= `SLL;
-                `SRLFunc  : ALUCtrl <= `SRL;
-                `SRAFunc  : ALUCtrl <= `SRA;
-                `ADDFunc  : ALUCtrl <= `ADD;
-                `ADDUFunc : ALUCtrl <= `ADDU;
-                `SUBFunc  : ALUCtrl <= `SUB;
-                `SUBUFunc : ALUCtrl <= `SUBU;
-                `ANDFunc  : ALUCtrl <= `AND;
-                `ORFunc   : ALUCtrl <= `OR;
-                `XORFunc  : ALUCtrl <= `XOR;
-                `NORFunc  : ALUCtrl <= `NOR;
-                `SLTFunc  : ALUCtrl <= `SLT;
-                `SLTUFunc : ALUCtrl <= `SLTU;
-                default   : ALUCtrl <= 4'b0000; // Default to 0 if undefined
-            endcase
-        end else begin
-     
-            ALUCtrl <= ALUop;
-        end
-    end
+module ALUControl(output logic [3:0]ALUCtrl, input logic [3:0]ALUop, input logic [5:0]FuncCode);
+
+	always_comb begin
+		if (ALUop == 4'b1111) begin
+			case(FuncCode)
+				`SLLFunc : ALUCtrl <= `SLL;
+				`SRLFunc : ALUCtrl <= `SRL;
+				`SRAFunc : ALUCtrl <= `SRA;
+				`ADDFunc : ALUCtrl <= `ADD;
+				`ADDUFunc: ALUCtrl <= `ADDU;
+				`SUBFunc : ALUCtrl <= `SUB;
+				`SUBUFunc: ALUCtrl <= `SUBU;
+				`ANDFunc : ALUCtrl <= `AND;
+				`ORFunc  : ALUCtrl <= `OR;
+				`XORFunc : ALUCtrl <= `XOR;
+				`NORFunc : ALUCtrl <= `NOR;
+				`SLTFunc : ALUCtrl <= `SLT;
+				`SLTUFunc: ALUCtrl <= `SLTU;
+				 default : ALUCtrl <= 0;
+			endcase
+		end
+		else ALUCtrl <= ALUop;
+	end
+	
 endmodule

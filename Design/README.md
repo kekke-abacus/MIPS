@@ -1,4 +1,0 @@
-# MIPS
-# MIPS
-# MIPS
-# MIPS
